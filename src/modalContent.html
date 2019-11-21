@@ -1,0 +1,25 @@
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-4 col-md-offset-4 well well-sm">
+            <legend><a><i class="fas fa-edit"></i></a> Edit Task</legend>
+            <div>
+                <input class="form-control" name="name" placeholder="ID Task" type="text" readonly/>
+                <input class="form-control" name="name" placeholder="Name Task" type="text" />
+                <textarea name="message" id="message" class="form-control" rows="9" cols="25" required="required" placeholder="Text"></textarea>
+
+                <label> Select urgency and status </label>
+                <div class="row">
+                    <div class="col-xs-6 col-md-6" ng-controller="SelectUrgencCntr">
+                        <select class="form-control" ng-model="selected" ng-options="urgency for urgency in urgencys">
+                            </select>
+                    </div>
+                    <div class="col-xs-6 col-md-6" ng-controller="SelectStatusCntr">
+                        <select class="form-control" ng-model="selected" ng-options="status for status in statuses">
+                            </select>
+                    </div>
+                </div>
+                <button class="btn btn-lg btn-primary btn-block" ng-click="ok()">Update</button>
+            </div>
+        </div>
+    </div>
+</div>

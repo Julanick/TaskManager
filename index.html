@@ -6,22 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>AngJS</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-    <link rel="stylesheet" href="/css/style.css">
 </head>
 
-<body>
+<body ng-app="AppModule">
     <div>
         Calendar
     </div>
-    <div>
 
-
-                        <button class="btn btn-primary">Add task</button>
-                
-    </div>
     <div ng-controller="TableTaskCntr" class="overflow-auto">
+        <div>
+            <button class="btn btn-primary" ng-click="open()">Add task</button>
+        </div>
         <div>
 
             <table class="table table-hover">
@@ -34,20 +29,18 @@
                         <th>Status</th>
                         <th>flag</th>
                     </tr>
-                <tbody>
-                    <tr ng-repeat="task in tasks">
-                        <td>{{$index + 1}}</td>
-                        <td>{{task.name}}</td>
-                        <td>{{task.text}}</td>
-                        <td ng-controller="SelectUrgencCntr"> <select ng-model="selected"
-                                ng-options="urgency for urgency in urgencys"></select></td>
-                        <td ng-controller="SelectStatusCntr"><select ng-model="selected"
-                                ng-options="status for status in statuses"></select></td>
-                        <td> <button type="button" class="close" aria-label="Close">
+                    <tbody>
+                        <tr ng-repeat="task in tasks">
+                            <td>{{$index + 1}}</td>
+                            <td>{{task.name}}</td>
+                            <td>{{task.text}}</td>
+                            <td ng-controller="SelectUrgencCntr"> <select ng-model="selected" ng-options="urgency for urgency in urgencys"></select></td>
+                            <td ng-controller="SelectStatusCntr"><select ng-model="selected" ng-options="status for status in statuses"></select></td>
+                            <td> <button type="button" class="close" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button></td>
-                    </tr>
-                </tbody>
+                        </tr>
+                    </tbody>
                 </thead>
             </table>
         </div>
