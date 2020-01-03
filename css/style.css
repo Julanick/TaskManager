@@ -1,3 +1,53 @@
 body {
-    margin: 0px 50px;
+    margin: 0px 100px;
+    padding: 40px;
+}
+
+main {
+    height: 80vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+}
+
+header {
+    display: flex;
+    margin: 0 auto;
+}
+
+.nav_link {
+    display: inline-block;
+    font-size: 32px;
+    margin: 0 10px;
+    text-transform: uppercase;
+}
+
+a:hover,
+a:focus {
+    color: #23527c;
+    text-decoration: none;
+}
+
+section {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
+
+section>* {
+    margin: 20px;
+}
+
+.calendar {
+    min-width: 260px;
+}
+
+.tasks {
+    width: 75%;
+    height: 100%;
+    overflow: auto;
+}
+
+.content {
+    height: calc(100% - 80px);
 }
