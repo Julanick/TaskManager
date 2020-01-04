@@ -38,45 +38,33 @@ app.controller('DatepickerDemoCtrl', function($scope) {
 });
 
 
-
 app.controller("TableTaskCntr", function($scope) {
+
     $scope.tasks = [
-        { name: "English", text: "Learn veb", flag: 1 },
-        { name: "Ticket", text: "Buy ticket", flag: 1 },
-        { name: "Contract", text: "Overwrite contract", flag: 1 },
-        { name: "Meet", text: "Meet partners", flag: 1 },
-        { name: "English", text: "Learn modal veb", flag: 1 },
-        { name: "English", text: "Learn veb", flag: 1 },
-        { name: "Ticket", text: "Buy ticket", flag: 1 },
-        { name: "Contract", text: "Overwrite contract", flag: 1 },
-        { name: "Meet", text: "Meet partners", flag: 1 },
-        { name: "English", text: "Learn modal veb", flag: 1 },
-        { name: "English", text: "Learn veb", flag: 1 },
-        { name: "Ticket", text: "Buy ticket", flag: 1 },
-        { name: "Contract", text: "Overwrite contract", flag: 1 },
-        { name: "Meet", text: "Meet partners", flag: 1 },
-        { name: "English", text: "Learn modal veb", flag: 1 },
-        { name: "English", text: "Learn veb", flag: 1 },
-        { name: "Ticket", text: "Buy ticket", flag: 1 },
-        { name: "Contract", text: "Overwrite contract", flag: 1 },
-        { name: "Meet", text: "Meet partners", flag: 1 },
-        { name: "English", text: "Learn modal veb", flag: 1 },
-        { name: "English", text: "Learn veb", flag: 1 },
-        { name: "Ticket", text: "Buy ticket", flag: 1 },
-        { name: "Contract", text: "Overwrite contract", flag: 1 },
-        { name: "Meet", text: "Meet partners", flag: 1 },
-        { name: "English", text: "Learn modal veb", flag: 1 },
-        { name: "English", text: "Learn veb", flag: 1 },
-        { name: "Ticket", text: "Buy ticket", flag: 1 },
-        { name: "Contract", text: "Overwrite contract", flag: 1 },
-        { name: "Meet", text: "Meet partners", flag: 1 },
-        { name: "English", text: "Learn modal veb", flag: 1 },
-        { name: "English", text: "Learn veb", flag: 1 },
-        { name: "Ticket", text: "Buy ticket", flag: 1 },
-        { name: "Contract", text: "Overwrite contract", flag: 1 },
-        { name: "Meet", text: "Meet partners", flag: 1 },
-        { name: "English", text: "Learn modal veb", flag: 1 },
+        { id: "asd", name: "English", text: "Learn veb", flag: 1 },
+        { id: "asdfads", name: "Ticket", text: "Buy ticket", flag: 1 },
+        { id: "asdsdgsdg", name: "Contract", text: "Overwrite contract", flag: 1 },
+        { id: "asdfdh", name: "Meet", text: "Meet partners", flag: 1 }
     ];
+
+    var selectedTask = $scope.tasks[0];
+
+    $scope.create = function() {
+        //alert("Create!");
+        debugger;
+        $scope.tasks.push({ id: "asdasd", name: "Meeta", text: "Meet partnersa", flag: 1 });
+        $scope.$apply();
+        debugger;
+    };
+    $scope.update = function() {
+        //alert("Updated" + selectedTask.id);
+    };
+    $scope.delete = function(id) {
+        //alert("Deleted" + id);
+    };
+    $scope.select = function(id) {
+        //alert("Selected" + id);
+    };
 });
 
 app.controller("SelectUrgencCntr", function($scope) {
