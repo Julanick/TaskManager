@@ -17,30 +17,31 @@
     <link rel="stylesheet" href="/css/style.css">
 </head>
 
-<body>
+<body ng-controller="TasksCntr">
     <header>
         <a class="nav_link"> <i class="fas fa-tasks"></i> Task manager</a>
     </header>
     <main ng-controller="DatepickerDemoCtrl">
         <section>
-
             <pre>Selected date is: <em>{{dt | date:'fullDate' }}</em></pre>
             <div>
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addModal">Add task</button>
             </div>
-
-
+            <div>
+                <pre>Selected task is: <em>{{selectedTask.name}}</em></pre>
+            </div>
         </section>
         <section class="content">
             <div style="display:inline-block; min-height:290px;" class="calendar">
                 <datepicker ng-model="dt" show-weeks="false" class="well well-sm"></datepicker>
             </div>
-            <div ng-controller="TableTaskCntr" class="overflow-auto tasks">
+            <div class="overflow-auto tasks">
                 <div>
                     <table class="table table-hover ">
                         <thead>
                             <tr>
                                 <th>#</th>
+                                <th></th>
                                 <th>Name</th>
                                 <th>Text</th>
                                 <th>Urgency</th>
@@ -53,8 +54,8 @@
                                     <td data-toggle="modal" data-target="#editModal">Edit</td>
                                     <td>{{task.name}}</td>
                                     <td>{{task.text}}</td>
-                                    <td ng-controller="SelectUrgencCntr"> <select ng-model="selected" ng-options="urgency for urgency in urgencys"></select></td>
-                                    <td ng-controller="SelectStatusCntr"><select ng-model="selected" ng-options="status for status in statuses"></select></td>
+                                    <td ng-controller="SelectUrgencCntr"><select ng-model="task.urgency" ng-options="urgency for urgency in urgencys"></select></td>
+                                    <td ng-controller="SelectStatusCntr"><select ng-model="task.status" ng-options="status for status in statuses"></select></td>
                                     <td> <button type="button" class="close" aria-label="Close" ng-click="delete(task.id)">
                                 <span aria-hidden="true">&times;</span>
                             </button></td>
@@ -82,7 +83,7 @@
         <div class="modal-dialog">
 
             <!-- Modal content-->
-            <div ng-controller="TableTaskCntr" class="modal-content">
+            <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <h3><a><i class="fas fa-edit"></i></a> Edit Task</h3>
@@ -90,18 +91,18 @@
                 <div class="modal-body">
                     <div>
                         <div>
-                            <input class="form-control" name="name" placeholder="ID Task" type="text" readonly/>
-                            <input class="form-control" name="name" placeholder="Name Task" type="text" />
-                            <textarea name="message" id="message" class="form-control" rows="9" cols="25" required="required" placeholder="Text"></textarea>
+                            <input class="form-control" name="name" placeholder="ID Task" type="text" ng-model="selectedTask.id" readonly>
+                            <input class="form-control" name="name" placeholder="Name Task" type="text" ng-model="selectedTask.name" />
+                            <textarea name="message" id="message" class="form-control" rows="9" cols="25" required="required" placeholder="Text" ng-model="selectedTask.text"></textarea>
 
                             <label> Select urgency and status </label>
                             <div class="row">
                                 <div class="col-xs-6 col-md-6" ng-controller="SelectUrgencCntr">
-                                    <select class="form-control" ng-model="selected" ng-options="urgency for urgency in urgencys">
+                                    <select class="form-control" ng-model="selectedTask.urgency" ng-options="urgency for urgency in urgencys">
                                                 </select>
                                 </div>
                                 <div class="col-xs-6 col-md-6" ng-controller="SelectStatusCntr">
-                                    <select class="form-control" ng-model="selected" ng-options="status for status in statuses"></select>
+                                    <select class="form-control" ng-model="selectedTask.status" ng-options="status for status in statuses"></select>
                                 </div>
                             </div>
 
@@ -122,7 +123,7 @@
         <div class="modal-dialog">
 
             <!-- Modal content-->
-            <div ng-controller="TableTaskCntr" class="modal-content">
+            <div class="modal-content">
                 <div class="modal-header">
                     <button type="button" class="close" data-dismiss="modal">&times;</button>
                     <h3><a><i class="fas fa-save"></i></a> Add Task</h3>
@@ -130,25 +131,24 @@
                 <div class="modal-body">
                     <div>
                         <div>
-                            <input class="form-control" name="name" placeholder="ID Task" type="text" readonly/>
-                            <input class="form-control" name="name" placeholder="Name Task" type="text" />
-                            <textarea name="message" id="message" class="form-control" rows="9" cols="25" required="required" placeholder="Text"></textarea>
+                            <input class="form-control" name="name" placeholder="Name Task" type="text" ng-model="newTaskModel.name" />
+                            <textarea name="message" id="message" class="form-control" rows="9" cols="25" required="required" placeholder="Text" ng-model="newTaskModel.text"></textarea>
 
                             <label> Select urgency and status </label>
                             <div class="row">
                                 <div class="col-xs-6 col-md-6" ng-controller="SelectUrgencCntr">
-                                    <select class="form-control" ng-model="selected" ng-options="urgency for urgency in urgencys">
-                                                    </select>
+                                    <select class="form-control" ng-model="newTaskModel.urgency" ng-options="urgency for urgency in urgencys">
+                                                </select>
                                 </div>
                                 <div class="col-xs-6 col-md-6" ng-controller="SelectStatusCntr">
-                                    <select class="form-control" ng-model="selected" ng-options="status for status in statuses"></select>
+                                    <select class="form-control" ng-model="newTaskModel.status" ng-options="status for status in statuses"></select>
                                 </div>
                             </div>
 
                         </div>
                     </div>
                 </div>
-                <div ng-controller="TableTaskCntr" class="modal-footer">
+                <div class="modal-footer">
                     <button class="btn btn-lg btn-primary btn-block" ng-click="create()" data-dismiss="modal">Create</button>
                     <button type="button" class="btn btn-lg btn-default btn-block" data-dismiss="modal">Close</button>
                 </div>

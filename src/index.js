@@ -1,4 +1,5 @@
 import angular from 'angular';
+import _ from 'lodash';
 
 var app = angular.module("AppModule", ['ui.bootstrap']);
 app.controller('DatepickerDemoCtrl', function($scope) {
@@ -38,41 +39,53 @@ app.controller('DatepickerDemoCtrl', function($scope) {
 });
 
 
-app.controller("TableTaskCntr", function($scope) {
+app.controller("TasksCntr", function($scope) {
+
+    var newTaskTemplate = { id: "", name: "", text: "", flag: 1, urgency: "Low", status: "New" };
 
     $scope.tasks = [
-        { id: "asd", name: "English", text: "Learn veb", flag: 1 },
-        { id: "asdfads", name: "Ticket", text: "Buy ticket", flag: 1 },
-        { id: "asdsdgsdg", name: "Contract", text: "Overwrite contract", flag: 1 },
-        { id: "asdfdh", name: "Meet", text: "Meet partners", flag: 1 }
+        { id: uuidv4(), name: "English", text: "Learn veb", flag: 1, urgency: "Low", status: "New" },
+        { id: uuidv4(), name: "Ticket", text: "Buy ticket", flag: 1, urgency: "Low", status: "New" },
+        { id: uuidv4(), name: "Contract", text: "Overwrite contract", flag: 1, urgency: "Low", status: "New" },
+        { id: uuidv4(), name: "Meet", text: "Meet partners", flag: 1, urgency: "Low", status: "New" }
     ];
 
-    var selectedTask = $scope.tasks[0];
+    $scope.selectedTask = $scope.tasks[0];
+
+    $scope.newTaskModel = _.clone(newTaskTemplate);
 
     $scope.create = function() {
-        //alert("Create!");
-        debugger;
-        $scope.tasks.push({ id: "asdasd", name: "Meeta", text: "Meet partnersa", flag: 1 });
-        $scope.$apply();
-        debugger;
+        $scope.newTaskModel.id = uuidv4();
+
+        $scope.tasks.push($scope.newTaskModel);
+        $scope.newTaskModel = _.clone(newTaskTemplate);
     };
     $scope.update = function() {
         //alert("Updated" + selectedTask.id);
     };
     $scope.delete = function(id) {
-        //alert("Deleted" + id);
+        _.remove($scope.tasks, function(task) { return task.id === id; });
     };
     $scope.select = function(id) {
-        //alert("Selected" + id);
+        $scope.selectedTask = _.find($scope.tasks, function(task) { return task.id === id; });
     };
 });
 
 app.controller("SelectUrgencCntr", function($scope) {
-    $scope.urgencys = ['low', 'moderate', 'high', 'extreme'];
-    $scope.selected = "low";
+    $scope.urgencys = ['Low', 'Moderate', 'High', 'Extreme'];
+    $scope.selected = "Low";
 });
 
 app.controller("SelectStatusCntr", function($scope) {
-    $scope.statuses = ['new', 'in progress', 'closed'];
-    $scope.selected = "new";
+    $scope.statuses = ['New', 'In progress', 'Closed'];
+    $scope.selected = "New";
 });
+
+
+function uuidv4() {
+    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+        var r = Math.random() * 16 | 0,
+            v = c == 'x' ? r : (r & 0x3 | 0x8);
+        return v.toString(16);
+    });
+}
