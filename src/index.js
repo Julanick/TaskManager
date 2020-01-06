@@ -41,13 +41,13 @@ app.controller('DatepickerDemoCtrl', function($scope) {
 
 app.controller("TasksCntr", function($scope) {
 
-    var newTaskTemplate = { id: "", name: "", text: "", flag: 1, urgency: "Low", status: "New" };
+    var newTaskTemplate = { id: "", name: "", text: "", urgency: "Low", status: "New" };
 
     $scope.tasks = [
-        { id: uuidv4(), name: "English", text: "Learn veb", flag: 1, urgency: "Low", status: "New" },
-        { id: uuidv4(), name: "Ticket", text: "Buy ticket", flag: 1, urgency: "Low", status: "New" },
-        { id: uuidv4(), name: "Contract", text: "Overwrite contract", flag: 1, urgency: "Low", status: "New" },
-        { id: uuidv4(), name: "Meet", text: "Meet partners", flag: 1, urgency: "Low", status: "New" }
+        { id: uuidv4(), name: "English", text: "Learn veb", urgency: "Low", status: "New" },
+        { id: uuidv4(), name: "Ticket", text: "Buy ticket", urgency: "Low", status: "New" },
+        { id: uuidv4(), name: "Contract", text: "Overwrite contract", urgency: "Low", status: "New" },
+        { id: uuidv4(), name: "Meet", text: "Meet partners", urgency: "Low", status: "New" }
     ];
 
     $scope.selectedTask = $scope.tasks[0];
