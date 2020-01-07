@@ -1,11 +1,79 @@
 import angular from 'angular';
 import _ from 'lodash';
+import { getTaskById, createTask, updateTask, deleteTask, getAllDayTasks } from './taskDataProvider';
 
 var app = angular.module("AppModule", ['ui.bootstrap']);
-app.controller('DatepickerDemoCtrl', function($scope) {
+
+app.controller("TasksCntr", function($scope) {
+
+    var newTaskTemplate = { _id: "", name: "", text: "", urgency: "Low", status: "New" };
+    $scope.newTaskModel = _.clone(newTaskTemplate);
+    $scope.create = function() {
+
+        $scope.newTaskModel.date = $scope.dt.toISOString();
+
+        createTask($scope.newTaskModel)
+            .done(function(data) {
+                $scope.newTaskModel._id = data;
+                $scope.tasks.push($scope.newTaskModel);
+                $scope.newTaskModel = _.clone(newTaskTemplate);
+                $scope.$apply();
+            })
+            .fail(function(data) {
+                alert("Task creation error!")
+            });
+    };
+    $scope.update = function() {
+        updateTask($scope.selectedTask)
+            .done(function(data) {
+                var existingTask = _.find($scope.tasks, function(task) { return task._id === $scope.selectedTask._id; });
+                existingTask.title = data.title;
+                existingTask.text = data.text;
+                existingTask.status = data.status;
+                existingTask.urgency = data.urgency;
+                $scope.$apply();
+            })
+            .fail(function(data) {
+                alert("Task update error!");
+            });
+    };
+
+    $scope.delete = function(id) {
+        deleteTask(id)
+            .done(function(data) {
+                _.remove($scope.tasks, function(task) { return task._id === id; });
+                $scope.$apply();
+            })
+            .fail(function(data) {
+                alert("Task delete error!");
+            });
+
+    };
+    $scope.select = function(id) {
+        $scope.selectedTask = _.clone(_.find($scope.tasks, function(task) { return task._id === id; }));
+    };
+
+    // -------------------------------
+
     $scope.today = function() {
         $scope.dt = new Date();
+        $scope.dt.setHours(0, 0, 0, 0);
     };
+
+    $scope.selectDate = function(dt) {
+        dt.setHours(0, 0, 0, 0);
+        getAllDayTasks(dt)
+            .done(function(data) {
+
+                $scope.tasks = data;
+                $scope.selectedTask = $scope.tasks[0];
+                $scope.$apply();
+            })
+            .fail(function(data) {
+                alert("Error getting task for selected date!")
+            });
+    }
+
     $scope.today();
 
     $scope.clear = function() {
@@ -36,39 +104,8 @@ app.controller('DatepickerDemoCtrl', function($scope) {
 
     $scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'shortDate'];
     $scope.format = $scope.formats[0];
-});
 
-
-app.controller("TasksCntr", function($scope) {
-
-    var newTaskTemplate = { id: "", name: "", text: "", urgency: "Low", status: "New" };
-
-    $scope.tasks = [
-        { id: uuidv4(), name: "English", text: "Learn veb", urgency: "Low", status: "New" },
-        { id: uuidv4(), name: "Ticket", text: "Buy ticket", urgency: "Low", status: "New" },
-        { id: uuidv4(), name: "Contract", text: "Overwrite contract", urgency: "Low", status: "New" },
-        { id: uuidv4(), name: "Meet", text: "Meet partners", urgency: "Low", status: "New" }
-    ];
-
-    $scope.selectedTask = $scope.tasks[0];
-
-    $scope.newTaskModel = _.clone(newTaskTemplate);
-
-    $scope.create = function() {
-        $scope.newTaskModel.id = uuidv4();
-
-        $scope.tasks.push($scope.newTaskModel);
-        $scope.newTaskModel = _.clone(newTaskTemplate);
-    };
-    $scope.update = function() {
-        //alert("Updated" + selectedTask.id);
-    };
-    $scope.delete = function(id) {
-        _.remove($scope.tasks, function(task) { return task.id === id; });
-    };
-    $scope.select = function(id) {
-        $scope.selectedTask = _.find($scope.tasks, function(task) { return task.id === id; });
-    };
+    $scope.selectDate($scope.dt);
 });
 
 app.controller("SelectUrgencCntr", function($scope) {
@@ -80,12 +117,3 @@ app.controller("SelectStatusCntr", function($scope) {
     $scope.statuses = ['New', 'In progress', 'Closed'];
     $scope.selected = "New";
 });
-
-
-function uuidv4() {
-    return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
-        var r = Math.random() * 16 | 0,
-            v = c == 'x' ? r : (r & 0x3 | 0x8);
-        return v.toString(16);
-    });
-}

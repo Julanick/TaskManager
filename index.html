@@ -21,19 +21,19 @@
     <header>
         <a class="nav_link"> <i class="fas fa-tasks"></i> Task manager</a>
     </header>
-    <main ng-controller="DatepickerDemoCtrl">
+    <main>
         <section>
             <pre>Selected date is: <em>{{dt | date:'fullDate' }}</em></pre>
             <div>
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addModal">Add task</button>
             </div>
             <div>
-                <pre>Selected task is: <em>{{selectedTask.name}}</em></pre>
+                <pre>Selected task is: <em>{{selectedTask.title}}</em></pre>
             </div>
         </section>
         <section class="content">
             <div style="display:inline-block; min-height:290px;" class="calendar">
-                <datepicker ng-model="dt" show-weeks="false" class="well well-sm"></datepicker>
+                <datepicker ng-model="dt" ng-change="selectDate(dt)" show-weeks="false" class="well well-sm"></datepicker>
             </div>
             <div class="overflow-auto tasks">
                 <div>
@@ -49,14 +49,14 @@
                                 <th></th>
                             </tr>
                             <tbody ng-model="tasks">
-                                <tr ng-click="select(task.id)" ng-repeat="task in tasks" ng-model="task">
+                                <tr ng-click="select(task._id)" ng-repeat="task in tasks" ng-model="task">
                                     <td>{{$index + 1}}</td>
                                     <td data-toggle="modal" data-target="#editModal">Edit</td>
-                                    <td>{{task.name}}</td>
+                                    <td>{{task.title}}</td>
                                     <td>{{task.text}}</td>
                                     <td ng-controller="SelectUrgencCntr"><select ng-model="task.urgency" ng-options="urgency for urgency in urgencys"></select></td>
                                     <td ng-controller="SelectStatusCntr"><select ng-model="task.status" ng-options="status for status in statuses"></select></td>
-                                    <td> <button type="button" class="close" aria-label="Close" ng-click="delete(task.id)">
+                                    <td> <button type="button" class="close" aria-label="Close" ng-click="delete(task._id)">
                                 <span aria-hidden="true">&times;</span>
                             </button></td>
                                 </tr>
@@ -91,8 +91,8 @@
                 <div class="modal-body">
                     <div>
                         <div>
-                            <input class="form-control" name="name" placeholder="ID Task" type="text" ng-model="selectedTask.id" readonly>
-                            <input class="form-control" name="name" placeholder="Name Task" type="text" ng-model="selectedTask.name" />
+                            <input class="form-control" name="name" type="text" ng-model="selectedTask._id" readonly/>
+                            <input class="form-control" name="name" placeholder="Tasks name" type="text" ng-model="selectedTask.title" />
                             <textarea name="message" id="message" class="form-control" rows="9" cols="25" required="required" placeholder="Text" ng-model="selectedTask.text"></textarea>
 
                             <label> Select urgency and status </label>
@@ -131,7 +131,7 @@
                 <div class="modal-body">
                     <div>
                         <div>
-                            <input class="form-control" name="name" placeholder="Name Task" type="text" ng-model="newTaskModel.name" />
+                            <input class="form-control" name="name" placeholder="Name Task" type="text" ng-model="newTaskModel.title" />
                             <textarea name="message" id="message" class="form-control" rows="9" cols="25" required="required" placeholder="Text" ng-model="newTaskModel.text"></textarea>
 
                             <label> Select urgency and status </label>
