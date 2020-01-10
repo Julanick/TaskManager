@@ -49,13 +49,13 @@
                                 <th></th>
                             </tr>
                             <tbody ng-model="tasks">
-                                <tr ng-click="select(task._id)" ng-repeat="task in tasks" ng-model="task">
+                                <tr ng-click="select(task)" ng-repeat="task in tasks" ng-model="task">
                                     <td>{{$index + 1}}</td>
                                     <td data-toggle="modal" data-target="#editModal">Edit</td>
                                     <td>{{task.title}}</td>
                                     <td>{{task.text}}</td>
-                                    <td ng-controller="SelectUrgencCntr"><select ng-model="task.urgency" ng-options="urgency for urgency in urgencys"></select></td>
-                                    <td ng-controller="SelectStatusCntr"><select ng-model="task.status" ng-options="status for status in statuses"></select></td>
+                                    <td ng-controller="SelectUrgencCntr"><select ng-model="task.urgency" ng-change="update(task)" ng-options="urgency for urgency in urgencys"></select></td>
+                                    <td ng-controller="SelectStatusCntr"><select ng-model="task.status" ng-change="update(task)" ng-options="status for status in statuses"></select></td>
                                     <td> <button type="button" class="close" aria-label="Close" ng-click="delete(task._id)">
                                 <span aria-hidden="true">&times;</span>
                             </button></td>
@@ -110,7 +110,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-lg btn-primary btn-block" ng-click="update()" data-dismiss="modal">Update</button>
+                    <button class="btn btn-lg btn-primary btn-block" ng-click="update(selectedTask)" data-dismiss="modal">Update</button>
                     <button type="button" class="btn btn-lg btn-default btn-block" data-dismiss="modal">Close</button>
                 </div>
             </div>

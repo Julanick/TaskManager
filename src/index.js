@@ -6,7 +6,7 @@ var app = angular.module("AppModule", ['ui.bootstrap']);
 
 app.controller("TasksCntr", function($scope) {
 
-    var newTaskTemplate = { _id: "", name: "", text: "", urgency: "Low", status: "New" };
+    var newTaskTemplate = { _id: "", title: "", text: "", urgency: "Moderate", status: "New" };
     $scope.newTaskModel = _.clone(newTaskTemplate);
     $scope.create = function() {
 
@@ -23,10 +23,11 @@ app.controller("TasksCntr", function($scope) {
                 alert("Task creation error!")
             });
     };
-    $scope.update = function() {
-        updateTask($scope.selectedTask)
+
+    $scope.update = function(task) {
+        updateTask(task)
             .done(function(data) {
-                var existingTask = _.find($scope.tasks, function(task) { return task._id === $scope.selectedTask._id; });
+                var existingTask = _.find($scope.tasks, function(t) { return t._id === task._id; });
                 existingTask.title = data.title;
                 existingTask.text = data.text;
                 existingTask.status = data.status;
@@ -40,17 +41,18 @@ app.controller("TasksCntr", function($scope) {
 
     $scope.delete = function(id) {
         deleteTask(id)
-            .done(function(data) {
+            .done(function() {
                 _.remove($scope.tasks, function(task) { return task._id === id; });
                 $scope.$apply();
             })
-            .fail(function(data) {
+            .fail(function() {
                 alert("Task delete error!");
             });
 
     };
-    $scope.select = function(id) {
-        $scope.selectedTask = _.clone(_.find($scope.tasks, function(task) { return task._id === id; }));
+
+    $scope.select = function(task) {
+        $scope.selectedTask = _.clone(task);
     };
 
     // -------------------------------
