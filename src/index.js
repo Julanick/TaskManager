@@ -6,7 +6,7 @@ var app = angular.module("AppModule", ['ui.bootstrap']);
 
 app.controller("TasksCntr", function($scope) {
 
-    var newTaskTemplate = { _id: "", title: "", text: "", urgency: "Moderate", status: "New" };
+    var newTaskTemplate = { _id: "", title: "", text: "", urgency: "Not urgent", status: "New" };
     $scope.newTaskModel = _.clone(newTaskTemplate);
     $scope.create = function(task) {
 
@@ -114,11 +114,11 @@ app.controller("TasksCntr", function($scope) {
 });
 
 app.controller("SelectUrgencCntr", function($scope) {
-    $scope.urgencys = ['Low', 'Moderate', 'High', 'Extreme'];
-    $scope.selected = "Low";
+    $scope.urgencys = ['Not urgent', 'Medium', 'Extreme'];
+    $scope.selected = 'Not urgent';
 });
 
 app.controller("SelectStatusCntr", function($scope) {
     $scope.statuses = ['New', 'In progress', 'Closed'];
-    $scope.selected = "New";
+    $scope.selected = 'New';
 });

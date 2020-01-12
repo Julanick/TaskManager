@@ -22,55 +22,58 @@
         <a class="nav_link"> <i class="fas fa-tasks"></i> Task manager</a>
     </header>
     <main>
-        <section>
-            <pre>Selected date is: <em>{{dt | date:'fullDate' }}</em></pre>
-            <div>
-                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addModal">Add task</button>
-            </div>
-            <div>
-                <pre>Selected task is: <em>{{selectedTaskClone.title}}</em></pre>
-            </div>
-            <div ng-repeat="newTasks in filteredtasksNew = (tasks | filter: {status:'New'} )"></div>
-            <div ng-repeat="inProgressTasks in filteredtasksInProgress = (tasks | filter: {status:'In progress'} )"></div>
-            <div ng-repeat="closedTasks in filteredtasksClosed = (tasks | filter: {status:'Closed'} )"></div>
-            <div>
-                <pre>New tasks: <em>{{filteredtasksNew.length}}</em> To do tasks: <em>{{filteredtasksInProgress.length}}</em> Closed tasks: <em>{{filteredtasksClosed.length}}</em></pre>
-            </div>
-        </section>
         <section class="content">
-            <div style="display:inline-block; min-height:290px;" class="calendar">
-                <datepicker ng-model="dt" ng-change="selectDate(dt)" show-weeks="false" class="well well-sm"></datepicker>
-            </div>
-            <div class="overflow-auto tasks">
-                <div>
-                    <table class="table table-hover ">
+            <section style="display:inline-block; min-height:290px;" class="calendar">
+                <pre style="width: 270px;"><em>{{dt | date:'fullDate' }}</em></pre>
+                <div ng-repeat="newTasks in filteredtasksNew = (tasks | filter: {status:'New'} )"></div>
+                <div ng-repeat="inProgressTasks in filteredtasksInProgress = (tasks | filter: {status:'In progress'} )"></div>
+                <div ng-repeat="closedTasks in filteredtasksClosed = (tasks | filter: {status:'Closed'} )"></div>
+                <pre>New tasks: <em>{{filteredtasksNew.length}}</em><br>To do tasks: <em>{{filteredtasksInProgress.length}}</em><br>Closed tasks: <em>{{filteredtasksClosed.length}}</em></pre>
+                <datepicker ng-model="dt" ng-change="selectDate(dt)" show-weeks="false" class="well well-sm" style="width: 270px"></datepicker>
+            </section>
+            <div class="tasks">
+                <section>
+                    <div>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addModal">Add task</button>
+                    </div>
+                    <div class="selectedTask">
+                        <h4>
+                            Title: {{selectedTaskClone.title}}
+                        </h4>
+
+                        <h5>
+                            ToDo: {{selectedTaskClone.text}}
+                        </h5>
+                    </div>
+                </section>
+                <section class="overflow-auto">
+                    <table class="table table-hover">
                         <thead>
                             <tr>
                                 <th>№</th>
                                 <th></th>
                                 <th>Name</th>
-                                <th>Text</th>
+                                <th>ToDo</th>
                                 <th>Urgency</th>
                                 <th>Status</th>
                                 <th></th>
                             </tr>
                             <tbody ng-model="tasks">
-                                <tr ng-click="cloneAndSelect(task)" ng-repeat="task in tasks" ng-model="task" ng-class="{disabled: task.status == 'Closed', green: task.status == 'In progress' }">
+                                <tr ng-click="cloneAndSelect(task)" ng-repeat="task in tasks | orderBy: 'urgency' " ng-model="task" ng-class="{disabled: task.status == 'Closed', green: task.status == 'In progress'}">
                                     <td>{{$index + 1}}</td>
                                     <td class="pointer" data-toggle="modal" data-target="#editModal"><i class="fas fa-edit"></i></td>
                                     <td>{{task.title}}</td>
-                                    <td>{{task.text}}</td>
-                                    <td ng-controller="SelectUrgencCntr"><select ng-model="task.urgency" ng-change="update(task)" ng-options="urgency for urgency in urgencys"></select></td>
+                                    <td>{{task.text | limitTo: 20 }}{{task.text.length > 20 ? '...' : ''}}</td>
+                                    <td ng-controller="SelectUrgencCntr"><select ng-class="{extreme: task.urgency == 'Extreme'}" ng-model="task.urgency" ng-change="update(task)" ng-options="urgency for urgency in urgencys"></select></td>
                                     <td ng-controller="SelectStatusCntr"><select ng-model="task.status" ng-change="update(task)" ng-options="status for status in statuses"></select></td>
                                     <td> <button type="button" class="close" aria-label="Close" ng-click="delete(task._id)">
-                                <span aria-hidden="true">&times;</span>
-                            </button></td>
+                                        <span aria-hidden="true">&times;</span>
+                                    </button></td>
                                 </tr>
                             </tbody>
                         </thead>
                     </table>
-                </div>
-
+                </section>
             </div>
         </section>
     </main>
