@@ -8,14 +8,15 @@ app.controller("TasksCntr", function($scope) {
 
     var newTaskTemplate = { _id: "", title: "", text: "", urgency: "Moderate", status: "New" };
     $scope.newTaskModel = _.clone(newTaskTemplate);
-    $scope.create = function() {
+    $scope.create = function(task) {
 
-        $scope.newTaskModel.date = $scope.dt.toISOString();
+        task.date = $scope.dt.toISOString();
 
-        createTask($scope.newTaskModel)
-            .done(function(data) {
-                $scope.newTaskModel._id = data;
-                $scope.tasks.push($scope.newTaskModel);
+        var promise = createTask(task);
+
+        promise.done(function(taskId) {
+                task._id = taskId;
+                $scope.tasks.push(task);
                 $scope.newTaskModel = _.clone(newTaskTemplate);
                 $scope.$apply();
             })
@@ -24,35 +25,36 @@ app.controller("TasksCntr", function($scope) {
             });
     };
 
-    $scope.update = function(task) {
-        updateTask(task)
-            .done(function(data) {
-                var existingTask = _.find($scope.tasks, function(t) { return t._id === task._id; });
-                existingTask.title = data.title;
-                existingTask.text = data.text;
-                existingTask.status = data.status;
-                existingTask.urgency = data.urgency;
+    $scope.update = function(taskToUpdate) {
+
+        var promise = updateTask(taskToUpdate);
+        promise.done(function(updatedTaskFromBackend) {
+                var existingTaskOnUI = _.find($scope.tasks, function(taskFromUI) { return taskFromUI._id === updatedTaskFromBackend._id; });
+                existingTaskOnUI.title = updatedTaskFromBackend.title;
+                existingTaskOnUI.text = updatedTaskFromBackend.text;
+                existingTaskOnUI.status = updatedTaskFromBackend.status;
+                existingTaskOnUI.urgency = updatedTaskFromBackend.urgency;
                 $scope.$apply();
             })
-            .fail(function(data) {
+            .fail(function() {
                 alert("Task update error!");
             });
     };
 
     $scope.delete = function(id) {
-        deleteTask(id)
-            .done(function() {
+
+        var promise = deleteTask(id);
+        promise.done(function() {
                 _.remove($scope.tasks, function(task) { return task._id === id; });
                 $scope.$apply();
             })
             .fail(function() {
                 alert("Task delete error!");
             });
-
     };
 
-    $scope.select = function(task) {
-        $scope.selectedTask = _.clone(task);
+    $scope.cloneAndSelect = function(task) {
+        $scope.selectedTaskClone = _.clone(task);
     };
 
     // -------------------------------
@@ -62,13 +64,14 @@ app.controller("TasksCntr", function($scope) {
         $scope.dt.setHours(0, 0, 0, 0);
     };
 
-    $scope.selectDate = function(dt) {
-        dt.setHours(0, 0, 0, 0);
-        getAllDayTasks(dt)
-            .done(function(data) {
+    $scope.selectDate = function(date) {
+        date.setHours(0, 0, 0, 0);
 
-                $scope.tasks = data;
-                $scope.selectedTask = $scope.tasks[0];
+        var promise = getAllDayTasks(date);
+
+        promise.done(function(tasksFromBackend) {
+                $scope.tasks = tasksFromBackend;
+                $scope.cloneAndSelect($scope.tasks[0]);
                 $scope.$apply();
             })
             .fail(function(data) {

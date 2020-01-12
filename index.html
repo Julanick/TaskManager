@@ -28,7 +28,13 @@
                 <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addModal">Add task</button>
             </div>
             <div>
-                <pre>Selected task is: <em>{{selectedTask.title}}</em></pre>
+                <pre>Selected task is: <em>{{selectedTaskClone.title}}</em></pre>
+            </div>
+            <div ng-repeat="newTasks in filteredtasksNew = (tasks | filter: {status:'New'} )"></div>
+            <div ng-repeat="inProgressTasks in filteredtasksInProgress = (tasks | filter: {status:'In progress'} )"></div>
+            <div ng-repeat="closedTasks in filteredtasksClosed = (tasks | filter: {status:'Closed'} )"></div>
+            <div>
+                <pre>New tasks: <em>{{filteredtasksNew.length}}</em> To do tasks: <em>{{filteredtasksInProgress.length}}</em> Closed tasks: <em>{{filteredtasksClosed.length}}</em></pre>
             </div>
         </section>
         <section class="content">
@@ -40,7 +46,7 @@
                     <table class="table table-hover ">
                         <thead>
                             <tr>
-                                <th>#</th>
+                                <th>№</th>
                                 <th></th>
                                 <th>Name</th>
                                 <th>Text</th>
@@ -49,9 +55,9 @@
                                 <th></th>
                             </tr>
                             <tbody ng-model="tasks">
-                                <tr ng-click="select(task)" ng-repeat="task in tasks" ng-model="task">
+                                <tr ng-click="cloneAndSelect(task)" ng-repeat="task in tasks" ng-model="task" ng-class="{disabled: task.status == 'Closed', green: task.status == 'In progress' }">
                                     <td>{{$index + 1}}</td>
-                                    <td data-toggle="modal" data-target="#editModal">Edit</td>
+                                    <td class="pointer" data-toggle="modal" data-target="#editModal"><i class="fas fa-edit"></i></td>
                                     <td>{{task.title}}</td>
                                     <td>{{task.text}}</td>
                                     <td ng-controller="SelectUrgencCntr"><select ng-model="task.urgency" ng-change="update(task)" ng-options="urgency for urgency in urgencys"></select></td>
@@ -91,18 +97,18 @@
                 <div class="modal-body">
                     <div>
                         <div>
-                            <input class="form-control" name="name" type="text" ng-model="selectedTask._id" readonly/>
-                            <input class="form-control" name="name" placeholder="Tasks name" type="text" ng-model="selectedTask.title" />
-                            <textarea name="message" id="message" class="form-control" rows="9" cols="25" required="required" placeholder="Text" ng-model="selectedTask.text"></textarea>
+                            <input class="form-control" name="name" type="text" ng-model="selectedTaskClone._id" readonly/>
+                            <input class="form-control" name="name" placeholder="Tasks name" type="text" ng-model="selectedTaskClone.title" />
+                            <textarea name="message" id="message" class="form-control" rows="9" cols="25" required="required" placeholder="Text" ng-model="selectedTaskClone.text"></textarea>
 
                             <label> Select urgency and status </label>
                             <div class="row">
                                 <div class="col-xs-6 col-md-6" ng-controller="SelectUrgencCntr">
-                                    <select class="form-control" ng-model="selectedTask.urgency" ng-options="urgency for urgency in urgencys">
+                                    <select class="form-control" ng-model="selectedTaskClone.urgency" ng-options="urgency for urgency in urgencys">
                                                 </select>
                                 </div>
                                 <div class="col-xs-6 col-md-6" ng-controller="SelectStatusCntr">
-                                    <select class="form-control" ng-model="selectedTask.status" ng-options="status for status in statuses"></select>
+                                    <select class="form-control" ng-model="selectedTaskClone.status" ng-options="status for status in statuses"></select>
                                 </div>
                             </div>
 
@@ -110,7 +116,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-lg btn-primary btn-block" ng-click="update(selectedTask)" data-dismiss="modal">Update</button>
+                    <button class="btn btn-lg btn-primary btn-block" ng-click="update(selectedTaskClone)" data-dismiss="modal">Update</button>
                     <button type="button" class="btn btn-lg btn-default btn-block" data-dismiss="modal">Close</button>
                 </div>
             </div>
@@ -149,7 +155,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button class="btn btn-lg btn-primary btn-block" ng-click="create()" data-dismiss="modal">Create</button>
+                    <button class="btn btn-lg btn-primary btn-block" ng-click="create(newTaskModel)" data-dismiss="modal">Create</button>
                     <button type="button" class="btn btn-lg btn-default btn-block" data-dismiss="modal">Close</button>
                 </div>
             </div>

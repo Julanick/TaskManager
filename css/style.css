@@ -58,3 +58,16 @@ input {
 textarea {
     margin-bottom: 10px;
 }
+
+.disabled {
+    color: darkGray;
+    font-style: italic;
+}
+
+.green {
+    background-color: #e9f7ed;
+}
+
+.pointer {
+    cursor: pointer;
+}
