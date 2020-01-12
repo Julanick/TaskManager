@@ -1,6 +1,8 @@
 body {
     padding: 3%;
     min-width: 800px;
+    background-image: url(../img/bg.jpg);
+    background-size: cover;
 }
 
 main {
