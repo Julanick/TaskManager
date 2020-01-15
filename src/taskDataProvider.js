@@ -1,3 +1,4 @@
+import $ from 'jquery';
 import { url } from './config/url'
 
 function getTaskById(id) {

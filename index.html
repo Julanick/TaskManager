@@ -13,8 +13,6 @@
     <script data-require="ui-bootstrap@*" data-semver="0.13.0" src="http://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.13.0.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
-
-    <link rel="stylesheet" href="/css/style.css">
 </head>
 
 <body ng-controller="TasksCntr">
@@ -28,7 +26,7 @@
                 <div ng-repeat="newTasks in filteredtasksNew = (tasks | filter: {status:'New'} )"></div>
                 <div ng-repeat="inProgressTasks in filteredtasksInProgress = (tasks | filter: {status:'In progress'} )"></div>
                 <div ng-repeat="closedTasks in filteredtasksClosed = (tasks | filter: {status:'Closed'} )"></div>
-                <pre>New tasks: <em>{{filteredtasksNew.length}}</em><br>To do tasks: <em>{{filteredtasksInProgress.length}}</em><br>Closed tasks: <em>{{filteredtasksClosed.length}}</em></pre>
+                <pre>TODO tasks: <em>{{filteredtasksNew.length}}</em><br>In progress: <em>{{filteredtasksInProgress.length}}</em><br>Closed tasks: <em>{{filteredtasksClosed.length}}</em></pre>
                 <datepicker ng-model="dt" ng-change="selectDate(dt)" show-weeks="false" class="well well-sm" style="width: 270px"></datepicker>
             </section>
             <div class="tasks">
@@ -82,9 +80,6 @@
     <footer>
 
     </footer>
-
-    <script src="/src/index.js"></script>
-
 
 
     <!-- Modal -->

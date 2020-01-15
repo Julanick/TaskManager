@@ -1,10 +1,10 @@
-import angular from 'angular';
+import '../css/style.css';
 import _ from 'lodash';
 import { getTaskById, createTask, updateTask, deleteTask, getAllDayTasks } from './taskDataProvider';
 
 var app = angular.module("AppModule", ['ui.bootstrap']);
 
-app.controller("TasksCntr", function($scope) {
+app.controller("TasksCntr", ['$scope', function($scope) {
 
     var newTaskTemplate = { _id: "", title: "", text: "", urgency: "Not urgent", status: "New" };
     $scope.newTaskModel = _.clone(newTaskTemplate);
@@ -111,14 +111,14 @@ app.controller("TasksCntr", function($scope) {
     $scope.format = $scope.formats[0];
 
     $scope.selectDate($scope.dt);
-});
+}]);
 
-app.controller("SelectUrgencCntr", function($scope) {
+app.controller("SelectUrgencCntr", ['$scope', function($scope) {
     $scope.urgencys = ['Not urgent', 'Medium', 'Extreme'];
     $scope.selected = 'Not urgent';
-});
+}]);
 
-app.controller("SelectStatusCntr", function($scope) {
+app.controller("SelectStatusCntr", ['$scope', function($scope) {
     $scope.statuses = ['New', 'In progress', 'Closed'];
     $scope.selected = 'New';
-});
+}]);
