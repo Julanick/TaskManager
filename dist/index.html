@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="AppModule">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>AngJS</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+    <script data-require="angular.js@1.3.15" data-semver="1.3.15" src="https://code.angularjs.org/1.3.15/angular.js"></script>
+    <script data-require="ui-bootstrap@*" data-semver="0.13.0" src="http://angular-ui.github.io/bootstrap/ui-bootstrap-tpls-0.13.0.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+</head>
+
+<body ng-controller="TasksCntr">
+    <header>
+        <a class="nav_link"> <i class="fas fa-tasks"></i> Task manager</a>
+    </header>
+    <main>
+        <section class="content">
+            <section style="display:inline-block; min-height:290px;" class="calendar">
+                <pre style="width: 270px;"><em>{{dt | date:'fullDate' }}</em></pre>
+                <div ng-repeat="newTasks in filteredtasksNew = (tasks | filter: {status:'New'} )"></div>
+                <div ng-repeat="inProgressTasks in filteredtasksInProgress = (tasks | filter: {status:'In progress'} )"></div>
+                <div ng-repeat="closedTasks in filteredtasksClosed = (tasks | filter: {status:'Closed'} )"></div>
+                <pre>TODO tasks: <em>{{filteredtasksNew.length}}</em><br>In progress: <em>{{filteredtasksInProgress.length}}</em><br>Closed tasks: <em>{{filteredtasksClosed.length}}</em></pre>
+                <datepicker ng-model="dt" ng-change="selectDate(dt)" show-weeks="false" class="well well-sm" style="width: 270px"></datepicker>
+            </section>
+            <div class="tasks">
+                <section>
+                    <div>
+                        <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#addModal">Add task</button>
+                    </div>
+                    <div class="selectedTask">
+                        <h4>
+                            Title: {{selectedTaskClone.title}}
+                        </h4>
+
+                        <h5>
+                            ToDo: {{selectedTaskClone.text}}
+                        </h5>
+                    </div>
+                </section>
+                <section class="overflow-auto">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>№</th>
+                                <th></th>
+                                <th>Name</th>
+                                <th>ToDo</th>
+                                <th>Urgency</th>
+                                <th>Status</th>
+                                <th></th>
+                            </tr>
+                            <tbody ng-model="tasks">
+                                <tr ng-click="cloneAndSelect(task)" ng-repeat="task in tasks | orderBy: 'urgency' " ng-model="task" ng-class="{disabled: task.status == 'Closed', green: task.status == 'In progress'}">
+                                    <td>{{$index + 1}}</td>
+                                    <td class="pointer" data-toggle="modal" data-target="#editModal"><i class="fas fa-edit"></i></td>
+                                    <td>{{task.title}}</td>
+                                    <td>{{task.text | limitTo: 20 }}{{task.text.length > 20 ? '...' : ''}}</td>
+                                    <td ng-controller="SelectUrgencCntr"><select ng-class="{extreme: task.urgency == 'Extreme'}" ng-model="task.urgency" ng-change="update(task)" ng-options="urgency for urgency in urgencys"></select></td>
+                                    <td ng-controller="SelectStatusCntr"><select ng-model="task.status" ng-change="update(task)" ng-options="status for status in statuses"></select></td>
+                                    <td> <button type="button" class="close" aria-label="Close" ng-click="delete(task._id)">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button></td>
+                                </tr>
+                            </tbody>
+                        </thead>
+                    </table>
+                </section>
+            </div>
+        </section>
+    </main>
+
+
+    <footer>
+
+    </footer>
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="editModal" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h3><a><i class="fas fa-edit"></i></a> Edit Task</h3>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <div>
+                            <input class="form-control" name="name" type="text" ng-model="selectedTaskClone._id" readonly/>
+                            <input class="form-control" name="name" placeholder="Tasks name" type="text" ng-model="selectedTaskClone.title" />
+                            <textarea name="message" id="message" class="form-control" rows="9" cols="25" required="required" placeholder="Text" ng-model="selectedTaskClone.text"></textarea>
+
+                            <label> Select urgency and status </label>
+                            <div class="row">
+                                <div class="col-xs-6 col-md-6" ng-controller="SelectUrgencCntr">
+                                    <select class="form-control" ng-model="selectedTaskClone.urgency" ng-options="urgency for urgency in urgencys">
+                                                </select>
+                                </div>
+                                <div class="col-xs-6 col-md-6" ng-controller="SelectStatusCntr">
+                                    <select class="form-control" ng-model="selectedTaskClone.status" ng-options="status for status in statuses"></select>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-lg btn-primary btn-block" ng-click="update(selectedTaskClone)" data-dismiss="modal">Update</button>
+                    <button type="button" class="btn btn-lg btn-default btn-block" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="addModal" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                    <h3><a><i class="fas fa-save"></i></a> Add Task</h3>
+                </div>
+                <div class="modal-body">
+                    <div>
+                        <div>
+                            <input class="form-control" name="name" placeholder="Name Task" type="text" ng-model="newTaskModel.title" />
+                            <textarea name="message" id="message" class="form-control" rows="9" cols="25" required="required" placeholder="Text" ng-model="newTaskModel.text"></textarea>
+
+                            <label> Select urgency and status </label>
+                            <div class="row">
+                                <div class="col-xs-6 col-md-6" ng-controller="SelectUrgencCntr">
+                                    <select class="form-control" ng-model="newTaskModel.urgency" ng-options="urgency for urgency in urgencys">
+                                                </select>
+                                </div>
+                                <div class="col-xs-6 col-md-6" ng-controller="SelectStatusCntr">
+                                    <select class="form-control" ng-model="newTaskModel.status" ng-options="status for status in statuses"></select>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-lg btn-primary btn-block" ng-click="create(newTaskModel)" data-dismiss="modal">Create</button>
+                    <button type="button" class="btn btn-lg btn-default btn-block" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+<script type="text/javascript" src="app.bundle.js"></script></body>
+
+</html>
