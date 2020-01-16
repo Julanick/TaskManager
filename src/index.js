@@ -1,5 +1,4 @@
 import '../css/style.css';
-//import '../img/bg.jpg';
 import _ from 'lodash';
 import { getTaskById, createTask, updateTask, deleteTask, getAllDayTasks } from './taskDataProvider';
 
