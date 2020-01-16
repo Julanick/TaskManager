@@ -58,7 +58,9 @@ app.controller("TasksCntr", ['$scope', function($scope) {
         $scope.selectedTaskClone = _.clone(task);
     };
 
-    // -------------------------------
+    $scope.cleanTask = function() {
+        $scope.newTaskModel = _.clone(newTaskTemplate);
+    };
 
     $scope.today = function() {
         $scope.dt = new Date();
