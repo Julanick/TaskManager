@@ -29,7 +29,7 @@ app.controller("TasksCntr", ['$scope', function($scope) {
 
         var promise = updateTask(taskToUpdate);
         promise.done(function(updatedTaskFromBackend) {
-                var existingTaskOnUI = _.find($scope.tasks, function(taskFromUI) { return taskFromUI._id === updatedTaskFromBackend._id; });
+                var existingTaskOnUI = _.find($scope.tasks, function(taskFromUI) { return taskFromUI._id === taskToUpdate._id; });
                 existingTaskOnUI.title = updatedTaskFromBackend.title;
                 existingTaskOnUI.text = updatedTaskFromBackend.text;
                 existingTaskOnUI.status = updatedTaskFromBackend.status;
