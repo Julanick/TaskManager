@@ -35,7 +35,7 @@ function getAllDayTasks(date) {
     return $.ajax({
         type: "GET",
         url: url + "/days",
-        data: { date: date.toISOString() },
+        data: { date: date.toLocaleDateString() },
     });
 }
 

@@ -10,7 +10,7 @@ app.controller("TasksCntr", ['$scope', function($scope) {
     $scope.newTaskModel = _.clone(newTaskTemplate);
     $scope.create = function(task) {
 
-        task.date = $scope.dt.toISOString();
+        task.date = $scope.dt.toLocaleDateString();
 
         var promise = createTask(task);
 
@@ -63,11 +63,9 @@ app.controller("TasksCntr", ['$scope', function($scope) {
 
     $scope.today = function() {
         $scope.dt = new Date();
-        $scope.dt.setHours(0, 0, 0, 0);
     };
 
     $scope.selectDate = function(date) {
-        date.setHours(0, 0, 0, 0);
 
         var promise = getAllDayTasks(date);
 
